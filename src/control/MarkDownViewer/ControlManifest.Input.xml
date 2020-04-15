@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest>
+  <control namespace="MMe" constructor="MarkDownViewer" version="0.1.3" display-name-key="MarkDownViewer" description-key="MarkDownViewer_Desc" control-type="standard">
+    <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
+    <property name="Content" display-name-key="Content" description-key="Content_Desc" of-type="Multiple" usage="bound" required="true" />
+    <property name="FontSize" display-name-key="Size" description-key="Size_Desc" of-type="Enum" usage="bound" required="true">
+      <value name="Initial" display-name-key="Initial" description-key="Initial_Desc">initial</value>
+      <value name="Smaller" display-name-key="Smaller" description-key="Smaller_Desc">smaller</value>
+      <value name="Small" display-name-key="Small" description-key="Small_Desc">small</value>
+      <value name="X-Small" display-name-key="XSmall" description-key="XSmall_Desc">x-small</value>
+      <value name="XX-Small" display-name-key="XXSmall" description-key="XXSmall_Desc">xx-small</value>
+      <value name="Medium" display-name-key="Medium" description-key="Medium_Desc">medium</value>
+      <value name="Large" display-name-key="Large" description-key="Large_Desc">large</value>
+      <value name="Larger" display-name-key="Larger" description-key="Larger_Desc">larger</value>
+      <value name="X-Large" display-name-key="XLarge" description-key="XLarge_Desc">x-large</value>
+      <value name="XX-Large" display-name-key="XXLarge" description-key="XXLarge_Desc">xx-large</value>
+    </property>
+    <property name="Overflow" display-name-key="Overflow" description-key="Overflow_Desc" of-type="Enum" usage="bound" required="true">
+      <value name="Auto" display-name-key="Auto" description-key="Auto_Desc">auto</value>
+      <value name="Scroll" display-name-key="Scroll" description-key="Scroll_Desc">scroll</value>
+    </property>
+
+    <resources>
+      <code path="index.ts" order="1"/>
+      <!-- UNCOMMENT TO ADD MORE RESOURCES
+      <css path="css/MarkDownViewer.css" order="1" />
+      <resx path="strings/MarkDownViewer.1033.resx" version="1.0.0" />
+      -->
+    </resources>
+    <!-- UNCOMMENT TO ENABLE THE SPECIFIED API
+    <feature-usage>
+      <uses-feature name="Device.captureAudio" required="true" />
+      <uses-feature name="Device.captureImage" required="true" />
+      <uses-feature name="Device.captureVideo" required="true" />
+      <uses-feature name="Device.getBarcodeValue" required="true" />
+      <uses-feature name="Device.getCurrentPosition" required="true" />
+      <uses-feature name="Device.pickFile" required="true" />
+      <uses-feature name="Utility" required="true" />
+      <uses-feature name="WebAPI" required="true" />
+    </feature-usage>
+    -->
+  </control>
+</manifest>
