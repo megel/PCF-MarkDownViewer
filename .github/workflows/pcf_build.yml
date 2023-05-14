@@ -17,13 +17,16 @@ jobs:
         uses: actions/setup-node@v2  # Sets up the Node.js environment
 
       - name: Install Dependencies
-        run: npm install  # Installs project dependencies
+        working-directory: ./src/control  # Sets the working directory to the control directory
+        run: npm install  # Installs project dependencies for the PCF control
 
       - name: Build PCF Control
+        working-directory: ./src/control  # Sets the working directory to the control directory
         run: npm run build  # Executes the build process for the PCF control
 
       - name: Build Solution
-        run: npm run build:solution  # Executes the build process for the solution
+        working-directory: ./src/solution  # Sets the working directory to the solution directory
+        run: npm install && npm run build  # Installs dependencies and executes the build process for the solution
 
       - name: Archive Solution
         uses: actions/upload-artifact@v2
