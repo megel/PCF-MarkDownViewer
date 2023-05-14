@@ -13,11 +13,10 @@ export interface IMarkdownViewerProps {
 
 export default class MarkdownViewer extends React.Component<IMarkdownViewerProps> {
     content?: string | undefined
+
     public render() {
 
         return (
-            // <div className="wmde-markdown-var"> </div>
-            
             <div style={{
                 overflow:  this.props.overflow  || "auto",
                 textAlign: "left",
@@ -27,15 +26,18 @@ export default class MarkdownViewer extends React.Component<IMarkdownViewerProps
                 maxHeight: this.props.maxHeight || "none",
                 maxWidth:  this.props.maxWidth  || "none"
                 }}>
-                <MarkdownPreview
-                    source={this.props.content || ''}
-                    rehypeRewrite={(node: any, index: any, parent: any) => {
-                        if (node.tagName === "a" && parent && /^h(1|2|3|4|5|6)/.test(parent.tagName)) {
-                            parent.children = parent.children.slice(1)
-                        }
-                    }}
-                />
-            </div>
+                <div id="mdViewer">
+                    <div className="wmde-markdown-var"> </div>
+                    <MarkdownPreview
+                        source={this.props.content || ''}
+                        rehypeRewrite={(node: any, index: any, parent: any) => {
+                            if (node.tagName === "a" && parent && /^h(1|2|3|4|5|6)/.test(parent.tagName)) {
+                                parent.children = parent.children.slice(1)
+                            }
+                        }}
+                    />
+                </div>
+            </div>            
         );
     }
 }

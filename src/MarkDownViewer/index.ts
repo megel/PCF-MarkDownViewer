@@ -12,6 +12,9 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 		overflow: "Auto"
 	}
 
+	private _outputs: IOutputs = {
+    };
+	notifyOutputChanged: () => void;
 
 	/**
 	 * Empty constructor.
@@ -33,7 +36,7 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 	{
 		this.mContainer = container;
 		context.mode.trackContainerResize(true);
-
+		this.notifyOutputChanged = notifyOutputChanged;
 		this.props.content  = context.parameters.Content.raw  || this.props.content;
 		this.props.fontSize = context.parameters.FontSize.raw || this.props.fontSize;
 		this.props.overflow = context.parameters.Overflow.raw || this.props.overflow;
@@ -61,6 +64,15 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 			),
 			this.mContainer
 		);
+
+		// Update the control's output property with the calculated dimensions
+		const contentHeight = this.calculateContentHeight();
+		const contentWidth = this.calculateContentWidth();
+		if (this._outputs.ContentHeight !== contentHeight || this._outputs.ContentWidth !== contentWidth) {
+			this._outputs.ContentHeight = contentHeight;
+			this._outputs.ContentWidth = contentWidth;
+			this.notifyOutputChanged();
+		}
 	}
 
 	/** 
@@ -69,7 +81,10 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 	 */
 	public getOutputs(): IOutputs
 	{
-		return {};
+		// Update the control's output property with the calculated dimensions
+		this._outputs.ContentHeight = this.calculateContentHeight();
+		this._outputs.ContentWidth = this.calculateContentWidth();
+		return this._outputs;
 	}
 
 	/** 
@@ -80,4 +95,18 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 	{
 		ReactDOM.unmountComponentAtNode(this.mContainer);
 	}
+
+    private calculateContentHeight(): number {
+        // Get the HTML content element within your control
+        const contentElement = document.getElementById("mdViewer");
+        // Calculate the height of the content element
+        return contentElement?.clientHeight || 0;
+    }
+
+	private calculateContentWidth(): number {
+        // Get the HTML content element within your control
+        const contentElement = document.getElementById("mdViewer");    
+        // Calculate the height of the content element
+        return contentElement?.clientWidth || 0;
+    }
 }

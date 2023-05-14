@@ -20,6 +20,9 @@
       <value name="Scroll" display-name-key="Scroll" description-key="Scroll_Desc">scroll</value>
     </property>
 
+    <property name="ContentWidth" display-name-key="ContentWidth"  required="false" of-type="Decimal" usage="output" />
+    <property name="ContentHeight" display-name-key="ContentHeight" required="false" of-type="Decimal" usage="output" />
+
     <resources>
       <code path="index.ts" order="1"/>
       <!-- UNCOMMENT TO ADD MORE RESOURCES
