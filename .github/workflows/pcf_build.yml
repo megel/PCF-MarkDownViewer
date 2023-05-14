@@ -1,0 +1,38 @@
+name: PCF Solution Build
+
+on:
+  push:
+    branches:
+      - master  # Workflow execution will be triggered when code is pushed to the "main" branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Uses an Ubuntu runtime environment
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2  # Downloads the source code
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2  # Sets up the Node.js environment
+
+      - name: Install Dependencies
+        run: npm install  # Installs project dependencies
+
+      - name: Build PCF Control
+        run: npm run build  # Executes the build process for the PCF control
+
+      - name: Build Solution
+        run: npm run build:solution  # Executes the build process for the solution
+
+      - name: Archive Solution
+        uses: actions/upload-artifact@v2
+        with:
+          name: solution
+          path: ./src/solution  # Archives the solution directory
+
+      - name: Archive PCF Control
+        uses: actions/upload-artifact@v2
+        with:
+          name: pcf-control
+          path: ./src/control  # Archives the PCF control directory
