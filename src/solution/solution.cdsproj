@@ -39,7 +39,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\control\control.pcfproj" />
+    <ProjectReference Include="..\src.pcfproj" />
   </ItemGroup>
 
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
