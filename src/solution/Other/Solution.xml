@@ -16,16 +16,13 @@
       <UniqueName>megel</UniqueName>
       <LocalizedNames>
         <!-- Localized Cds Publisher Name in language code-->
-        <LocalizedName description="megel" languagecode="1033" />
+        <LocalizedName description="Michael Megel" languagecode="1033" />
       </LocalizedNames>
-      <Descriptions>
-        <!-- Description of Cds Publisher in language code -->
-        <Description description="megel" languagecode="1033" />
-      </Descriptions>
+      <Descriptions />
       <EMailAddress xsi:nil="true"></EMailAddress>
       <SupportingWebsiteUrl xsi:nil="true"></SupportingWebsiteUrl>
       <!-- Customization Prefix for the Cds Publisher-->
-      <CustomizationPrefix>mme</CustomizationPrefix>
+      <CustomizationPrefix>mme2k</CustomizationPrefix>
       <!-- Derived Option Value Prefix for the Customization Prefix of Cds Publisher -->
       <CustomizationOptionValuePrefix>39387</CustomizationOptionValuePrefix>
       <Addresses>
