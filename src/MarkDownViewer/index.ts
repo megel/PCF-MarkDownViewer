@@ -51,9 +51,9 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 		this.props.fontSize  = context.parameters.FontSize.raw || this.props.fontSize;
 		this.props.overflow  = context.parameters.Overflow.raw || this.props.overflow;
 		try {
-			this.props.maxHeight = context.mode.allocatedHeight > 0 ? context.mode.allocatedHeight + "px" : undefined;
-			this.props.maxWidth  = context.mode.allocatedWidth  > 0 ? context.mode.allocatedWidth + "px"  : undefined;
-		} catch (e) { this.props.content = e }
+			this.props.maxHeight = context?.mode?.allocatedHeight > 0 ? context.mode.allocatedHeight + "px" : "400px";
+			this.props.maxWidth  = context?.mode?.allocatedWidth  > 0 ? context.mode.allocatedWidth  + "px" : "800px";
+		} catch (e) { this.props.content = `${e}` }
 
 		ReactDOM.render(
 			React.createElement(
