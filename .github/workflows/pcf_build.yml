@@ -28,14 +28,18 @@ jobs:
         working-directory: ./src/solution  # Sets the working directory to the solution directory
         run: npm install && npm run build  # Installs dependencies and executes the build process for the solution
 
+      - name: Build and Package PCF Solution
+        working-directory: ./src/solution  # Sets the working directory to the solution directory
+        run: msbuild /t:build /restore
+
       - name: Archive Solution
         uses: actions/upload-artifact@v2
         with:
           name: solution
           path: ./src/solution  # Archives the solution directory
 
-      - name: Archive PCF Control
-        uses: actions/upload-artifact@v2
-        with:
-          name: pcf-control
-          path: ./src/control  # Archives the PCF control directory
+      # - name: Archive PCF Control
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: pcf-control
+      #     path: ./src/control  # Archives the PCF control directory
