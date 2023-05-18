@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master  # Workflow execution will be triggered when code is pushed to the "main" branch
-  workflow_dispatch:  # Allow manual triggering of the workflow
 
 jobs:
   build:
@@ -32,25 +31,15 @@ jobs:
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
 
-      # - name: Set Solution Version
-      #   id: set-version
-      #   run: echo "::set-output name=version::${{ github.event.inputs.version }}"
-
       - name: Build and Package PCF Solution
         working-directory: ./src/solution  # Sets the working directory to the solution directory
         run: |
           msbuild /t:build /restore
-          echo "::set-output name=solution-name::$(grep -oP '<LocalizedName description="\K[^"]+' ./src/solution/src/Other/solution.xml)"
-          echo "::set-output name=solution-version::$(cat ./src/solution/src/Other/solution.xml | grep -oP '<Version>\K[^<]+' | tr -d '\n')"
+          echo "::set-output name=solution-name::$(grep -oP '<LocalizedName description="\K[^"]+' ./src/Other/solution.xml)"
+          echo "::set-output name=solution-version::$(cat ./src/Other/solution.xml | grep -oP '<Version>\K[^<]+' | tr -d '\n')"
       
       - name: Archive Solution
         uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.set-version.outputs.version }}/${{ steps.build.outputs.solution-name }}_managed_${{ steps.build.outputs.solution-version }}.zip
           path: ./src/solution/bin/Debug/solution.zip
-
-      # - name: Archive PCF Control
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: pcf-control
-      #     path: ./src/control  # Archives the PCF control directory
