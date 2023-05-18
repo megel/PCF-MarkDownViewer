@@ -13,14 +13,32 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2  # Downloads the source code
 
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Restore NuGet packages
+        run: dotnet restore
+
       - name: Extract Solution Name and Version
         id: extract-info
         run: |
-          $solution_name=$(grep -oP '<LocalizedName description="\K[^"]+' ./src/solution/src/Other/solution.xml)
-          $solution_version=$(cat ./src/solution/src/Other/solution.xml | grep -oP '<Version>\K[^<]+' | tr -d '\n')
-          echo "Solution $solution_name v$solution_version"
-          echo "name=solution-name::$solution_name"   >> $GITHUB_OUTPUT
-          echo "name=solution-version::$solution_version"   >> $GITHUB_OUTPUT
+          $xml = [xml](Get-Content ./src/solution/src/Other/solution.xml)
+          $version = $xml.ImportExportXml.SolutionManifest.Version
+          $description = $xml.ImportExportXml.SolutionManifest.LocalizedNames.LocalizedName.description
+
+          echo "Version: $version"
+          echo "Description: $description"
+
+      # - name: Extract Solution Name and Version
+      #   id: extract-info
+      #   run: |
+      #     $solution_name=$(grep -oP '<LocalizedName description="\K[^"]+' ./src/solution/src/Other/solution.xml)
+      #     $solution_version=$(cat ./src/solution/src/Other/solution.xml | grep -oP '<Version>\K[^<]+' | tr -d '\n')
+      #     echo "Solution $solution_name v$solution_version"
+      #     echo "name=solution-name::$solution_name"   >> $GITHUB_OUTPUT
+      #     echo "name=solution-version::$solution_version"   >> $GITHUB_OUTPUT
 
 
       # - name: Set up Node.js
