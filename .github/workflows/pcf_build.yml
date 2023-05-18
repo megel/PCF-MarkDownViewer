@@ -45,7 +45,7 @@ jobs:
         run: |
           msbuild /t:build /restore
           mv ./src/solution/bin/Debug/solution.zip ./src/solution/bin/Debug/${{ steps.extract-info.outputs.solution-name }}_managed_${{ steps.extract-info.outputs.solution-version }}.zip
-          $artifact = ""./src/solution/bin/Debug/${{ steps.extract-info.outputs.solution-name }}_managed_${{ steps.extract-info.outputs.solution-version }}.zip"
+          $artifact = "./src/solution/bin/Debug/${{ steps.extract-info.outputs.solution-name }}_managed_${{ steps.extract-info.outputs.solution-version }}.zip"
           echo "Artifact:  $$artifact"
           echo "artifact=$artifact"   >> $GITHUB_OUTPUT
 
