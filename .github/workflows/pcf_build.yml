@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Uses an Ubuntu runtime environment
+    runs-on: windows-latest # ubuntu-latest  # Uses an Ubuntu runtime environment
 
     steps:
       - name: Checkout Repository
