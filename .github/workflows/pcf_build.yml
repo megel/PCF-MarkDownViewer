@@ -44,14 +44,15 @@ jobs:
         working-directory: ./src/solution  # Sets the working directory to the solution directory
         run: |
           msbuild /t:build /restore
-          $artifact = "./src/solution/bin/Debug/${{ steps.extract-info.outputs.solution-name }}_managed_${{ steps.extract-info.outputs.solution-version }}.zip"
-          echo "Artifact:  $artifact"
-          mv ./bin/Debug/solution.zip ./bin/Debug/${{ steps.extract-info.outputs.solution-name }}_managed_${{ steps.extract-info.outputs.solution-version }}.zip
+          
+        # $artifact = "./src/solution/bin/Debug/${{ steps.extract-info.outputs.solution-name }}_managed_${{ steps.extract-info.outputs.solution-version }}.zip"
+        # echo "Artifact:  $artifact"
+        # mv ./bin/Debug/solution.zip ./bin/Debug/${{ steps.extract-info.outputs.solution-name }}_managed_${{ steps.extract-info.outputs.solution-version }}.zip
 
-          echo "artifact=$artifact"   >> $GITHUB_OUTPUT
+        # echo "artifact=$artifact"   >> $GITHUB_OUTPUT
 
       - name: Archive Solution
         uses: actions/upload-artifact@v2
         with:
-          #name: ${{ steps.extract-info.outputs.solution-name }}_managed_${{ steps.extract-info.outputs.solution-version }}.zip
-          path: ${{ steps.build-solution.artifact }}
+          name: ${{ steps.extract-info.outputs.solution-name }} ${{ steps.extract-info.outputs.solution-version }}
+          path: ./src/solution/bin/Debug/solution.zip
