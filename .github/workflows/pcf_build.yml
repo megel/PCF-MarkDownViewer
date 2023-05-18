@@ -35,8 +35,10 @@ jobs:
         working-directory: ./src/solution  # Sets the working directory to the solution directory
         run: |
           msbuild /t:build /restore
-          echo "::set-output name=solution-name::$(grep -oP '<LocalizedName description="\K[^"]+' ./src/Other/solution.xml)"
-          echo "::set-output name=solution-version::$(cat ./src/Other/solution.xml | grep -oP '<Version>\K[^<]+' | tr -d '\n')"
+          echo "Name: $(grep -oP '<LocalizedName description="\K[^"]+' ./src/Other/solution.xml)"
+          echo "name=solution-name::$(grep -oP '<LocalizedName description="\K[^"]+' ./src/Other/solution.xml)"  >> $GITHUB_OUTPUT
+          echo "Version: $(cat ./src/Other/solution.xml | grep -oP '<Version>\K[^<]+' | tr -d '\n')"
+          echo "name=solution-version::$(cat ./src/Other/solution.xml | grep -oP '<Version>\K[^<]+' | tr -d '\n')"  >> $GITHUB_OUTPUT
       
       - name: Archive Solution
         uses: actions/upload-artifact@v2
