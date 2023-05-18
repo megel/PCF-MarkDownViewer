@@ -28,6 +28,9 @@ jobs:
         working-directory: ./src/solution  # Sets the working directory to the solution directory
         run: npm install && npm run build  # Installs dependencies and executes the build process for the solution
 
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
       - name: Build and Package PCF Solution
         working-directory: ./src/solution  # Sets the working directory to the solution directory
         run: msbuild /t:build /restore
