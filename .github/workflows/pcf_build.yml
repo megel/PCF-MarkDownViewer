@@ -18,12 +18,12 @@ jobs:
         run: |
           $xml = [xml](Get-Content ./src/solution/src/Other/solution.xml)
           $solution_version = $xml.ImportExportXml.SolutionManifest.Version
-          $solution_name = $xml.ImportExportXml.SolutionManifest.LocalizedNames.LocalizedName.description
+          $solution_name    = "$($xml.ImportExportXml.SolutionManifest.LocalizedNames.LocalizedName.description)".replace(" ", "_")
 
           echo "Solution: $solution_name"
           echo "Version:  $solution_version"
-          echo "name=solution-name::$solution_name"   >> $GITHUB_OUTPUT
-          echo "name=solution-version::$solution_version"   >> $GITHUB_OUTPUT
+          echo "solution-name=$solution_name"   >> $GITHUB_OUTPUT
+          echo "solution-version=$solution_version"   >> $GITHUB_OUTPUT
 
       - name: Set up Node.js
         uses: actions/setup-node@v2  # Sets up the Node.js environment
@@ -36,24 +36,21 @@ jobs:
         working-directory: ./src  # Sets the working directory to the control directory
         run: npm run build  # Executes the build process for the PCF control
 
-      # - name: Build Solution
-      #   working-directory: ./src/solution  # Sets the working directory to the solution directory
-      #   run: npm install && npm run build  # Installs dependencies and executes the build process for the solution
-
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v1.1
 
       - name: Build and Package PCF Solution
+        id:   build-solution
         working-directory: ./src/solution  # Sets the working directory to the solution directory
         run: |
           msbuild /t:build /restore
-          echo "Name: $(grep -oP '<LocalizedName description="\K[^"]+' ./src/Other/solution.xml)"
-          echo "name=solution-name::$(grep -oP '<LocalizedName description="\K[^"]+' ./src/Other/solution.xml)"  >> $GITHUB_OUTPUT
-          echo "Version: $(cat ./src/Other/solution.xml | grep -oP '<Version>\K[^<]+' | tr -d '\n')"
-          echo "name=solution-version::$(cat ./src/Other/solution.xml | grep -oP '<Version>\K[^<]+' | tr -d '\n')"  >> $GITHUB_OUTPUT
-      
+          mv ./src/solution/bin/Debug/solution.zip ./src/solution/bin/Debug/${{ steps.extract-info.outputs.solution-name }}_managed_${{ steps.extract-info.outputs.solution-version }}.zip
+          $artifact = ""./src/solution/bin/Debug/${{ steps.extract-info.outputs.solution-name }}_managed_${{ steps.extract-info.outputs.solution-version }}.zip"
+          echo "Artifact:  $$artifact"
+          echo "artifact=$artifact"   >> $GITHUB_OUTPUT
+
       - name: Archive Solution
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ steps.extract-info.outputs.solution-name }}_managed_${{ steps.extract-info.outputs.solution-version }}.zip
-          path: ./src/solution/bin/Debug/solution.zip
+          #name: ${{ steps.extract-info.outputs.solution-name }}_managed_${{ steps.extract-info.outputs.solution-version }}.zip
+          path: ${{ steps.build-solution.artifact }}
