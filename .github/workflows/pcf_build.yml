@@ -24,9 +24,9 @@ jobs:
         working-directory: ./src  # Sets the working directory to the control directory
         run: npm run build  # Executes the build process for the PCF control
 
-      # - name: Build Solution
-      #   working-directory: ./src/solution  # Sets the working directory to the solution directory
-      #   run: npm install && npm run build  # Installs dependencies and executes the build process for the solution
+      - name: Build Solution
+        working-directory: ./src/solution  # Sets the working directory to the solution directory
+        run: npm install && npm run build  # Installs dependencies and executes the build process for the solution
 
       - name: Build and Package PCF Solution
         working-directory: ./src/solution  # Sets the working directory to the solution directory

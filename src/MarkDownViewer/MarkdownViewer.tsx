@@ -24,12 +24,16 @@ export default class MarkdownViewer extends React.Component<IMarkdownViewerProps
                 height:    this.props.maxHeight || "initial",
                 width:     this.props.maxWidth  || "initial",
                 maxHeight: this.props.maxHeight || "none",
-                maxWidth:  this.props.maxWidth  || "none"
+                maxWidth:  this.props.maxWidth  || "none",
+                userSelect: "text"
                 }}>
                 <div id="mdViewer">
                     <div className="wmde-markdown-var"> </div>
                     <MarkdownPreview
                         source={this.props.content || ''}
+                        style={{
+                            background: "transparent"
+                        }}
                         rehypeRewrite={(node: any, index: any, parent: any) => {
                             if (node.tagName === "a" && parent && /^h(1|2|3|4|5|6)/.test(parent.tagName)) {
                                 parent.children = parent.children.slice(1)

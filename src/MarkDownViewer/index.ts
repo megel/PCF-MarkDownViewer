@@ -9,7 +9,7 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 	private props: IMarkdownViewerProps = {
 		content:  "# This is a header\n\nAnd this is a paragraph\n\n* Item 1\n* Item 2\n\n**Code Example** (PowerShell):\n\n```PowerShell\nGet-ChildItem -Path \"C:\\Temp\" -Filter \"*.txt\" -Recurse\n```\n",
 		fontSize: "Initial",
-		overflow: "Auto"
+		overflow: "None"
 	}
 
 	private _outputs: IOutputs = {
