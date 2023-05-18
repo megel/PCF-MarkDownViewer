@@ -16,8 +16,8 @@ jobs:
       - name: Extract Solution Name and Version
         id: extract-info
         run: |
-          solution_name=$(grep -oP '<LocalizedName description="\K[^"]+' ./src/solution/src/Other/solution.xml)
-          solution_version=$(cat ./src/solution/src/Other/solution.xml | grep -oP '<Version>\K[^<]+' | tr -d '\n')
+          $solution_name=$(grep -oP '<LocalizedName description="\K[^"]+' ./src/solution/src/Other/solution.xml)
+          $solution_version=$(cat ./src/solution/src/Other/solution.xml | grep -oP '<Version>\K[^<]+' | tr -d '\n')
           echo "name=solution-name::$solution_name"   >> $GITHUB_OUTPUT
           echo "name=solution-version::$solution_version"   >> $GITHUB_OUTPUT
 
