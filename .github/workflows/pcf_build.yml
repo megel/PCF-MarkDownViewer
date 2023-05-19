@@ -44,19 +44,20 @@ jobs:
         uses: microsoft/setup-msbuild@v1.1
 
       - name: Build and Package PCF Solution
-        id:   build-solution
+        id:   "build_solution"
         working-directory: ./src/solution  # Sets the working directory to the solution directory
         run: |
           msbuild /t:build /restore
           
-        # $artifact = "./src/solution/bin/Debug/${{ steps.extract-info.outputs.solution-name }}_managed_${{ steps.extract-info.outputs.solution-version }}.zip"
-        # echo "Artifact:  $artifact"
-        # mv ./bin/Debug/solution.zip ./bin/Debug/${{ steps.extract-info.outputs.solution-name }}_managed_${{ steps.extract-info.outputs.solution-version }}.zip
+          $artifact = "./src/solution/bin/Debug/${{ steps.extract_info.outputs.solution_name }}_managed_${{ steps.extract_info.outputs.solution_version }}.zip"
+          echo "Artifact:  $artifact"
+          cp ./bin/Debug/solution.zip ./bin/Debug/${{ steps.extract-info.outputs.solution_name }}_managed_${{ steps.extract-info.outputs.solution_version }}.zip
 
-        # echo "artifact=$artifact"   >> $GITHUB_OUTPUT
+          echo "artifact=$artifact" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
 
       - name: Archive Solution
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ steps.extract-info.outputs.solution-name }} ${{ steps.extract-info.outputs.solution-version }}
-          path: ./src/solution/bin/Debug/solution.zip
+          name: ${{ steps.extract_info.outputs.solution_name }} ${{ steps.extract_info.outputs.solution_version }}
+          path: ${{ steps.build_solution.outputs.artifact }}
+          #./src/solution/bin/Debug/solution.zip
