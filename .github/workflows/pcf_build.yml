@@ -22,8 +22,8 @@ jobs:
 
           echo "Solution: $solution_name"
           echo "Version:  $solution_version"
-          echo "solution_name=$solution_name" >> "$GITHUB_OUTPUT"
-          echo "solution_version=$solution_version" >> "$GITHUB_OUTPUT"
+          echo "solution_name=$solution_name" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
+          echo "solution_version=$solution_version" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
 
       - name: "Check Version"
         run: |
