@@ -59,6 +59,5 @@ jobs:
       - name: Archive Solution
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ steps.extract_info.outputs.solution_name }} ${{ steps.extract_info.outputs.solution_version }}
+          name: Artifacts
           path: ${{ steps.build_solution.outputs.artifact }}
-          #./src/solution/bin/Debug/solution.zip
