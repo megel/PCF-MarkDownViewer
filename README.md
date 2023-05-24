@@ -16,7 +16,7 @@ MarkDown Viewer for PowerApps is a PCF Component to visualize [MarkDown](https:/
 
 ## Getting Started
 
-Clone the repository and open the command prompt in folder `"src/control"`. To retrieve all the required project dependencies, run the command:
+Clone the repository and open the command prompt in folder `"src/MarkDownViewer"`. To retrieve all the required project dependencies, run the command:
 
 ```cmd
 npm install

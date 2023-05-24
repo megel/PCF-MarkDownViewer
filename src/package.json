@@ -14,10 +14,7 @@
   "dependencies": {
     "@uiw/react-markdown-preview": "^4.1.13",
     "office-ui-fabric-react": "^7.106.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-markdown": "^8.0.7",
-    "react-view": "^1.0.0"
+    "react": "^16.13.1"
   },
   "devDependencies": {
     "@microsoft/eslint-plugin-power-apps": "^0.2.6",
@@ -26,7 +23,7 @@
     "@types/react": "^16.8",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",
-    "eslint": "^8.24.0",
+    "eslint": "^8.41.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.1",
