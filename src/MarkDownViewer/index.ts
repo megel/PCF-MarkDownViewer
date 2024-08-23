@@ -50,6 +50,7 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 	public updateView(context: ComponentFramework.Context<IInputs>): void
 	{
 		// Add code to update control view
+		const hasChangedContent = context.parameters.Content.raw !== this.props.content;
 		this.props.content   = context.parameters.Content.raw  || this.props.content;
 		this.props.fontSize  = context.parameters.FontSize.raw || this.props.fontSize;
 		this.props.overflow  = context.parameters.Overflow.raw || this.props.overflow;
@@ -69,7 +70,7 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 		const contentHeight = this.calculateContentHeight();
 		const contentWidth = this.calculateContentWidth();
 		const contentAsHtml = this.getHtmlContent();
-		if (this._outputs.ContentHeight !== contentHeight || this._outputs.ContentWidth !== contentWidth) {
+		if (this._outputs.ContentHeight !== contentHeight || this._outputs.ContentWidth !== contentWidth || hasChangedContent) {
 			this._outputs.ContentHeight = contentHeight;
 			this._outputs.ContentWidth = contentWidth;
 			this._outputs.ContentAsHtml = contentAsHtml;
@@ -86,6 +87,7 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 		// Update the control's output property with the calculated dimensions
 		this._outputs.ContentHeight = this.calculateContentHeight();
 		this._outputs.ContentWidth = this.calculateContentWidth();
+		this._outputs.ContentAsHtml = this.getHtmlContent();
 		return this._outputs;
 	}
 
@@ -113,7 +115,7 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
     }
 	
 	public getHtmlContent(): string {
-		// Get the HTML content element within your control
-		return  document.getElementById("mdMarkDown")?.innerHTML ?? "";
+		// Get the HTML content from node with class wmde-markdown
+		return document.querySelector(".wmde-markdown")?.innerHTML ?? "";
 	}
 }
