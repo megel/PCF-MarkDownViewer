@@ -114,6 +114,6 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 	
 	public getHtmlContent(): string {
 		// Get the HTML content element within your control
-		return  document.getElementById("mdMarkDown")?.innerHTML;
+		return  document.getElementById("mdMarkDown")?.innerHTML ?? "";
 	}
 }
