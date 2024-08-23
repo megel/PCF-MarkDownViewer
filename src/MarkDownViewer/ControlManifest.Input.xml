@@ -23,6 +23,7 @@
 
     <property name="ContentWidth" display-name-key="ContentWidth"  required="false" of-type="Decimal" usage="output" />
     <property name="ContentHeight" display-name-key="ContentHeight" required="false" of-type="Decimal" usage="output" />
+    <property name="ContentAsHtml" display-name-key="ContentAsHtml" required="false" of-type="Multiple" usage="output" />
 
     <resources>
       <code path="index.ts" order="1"/>

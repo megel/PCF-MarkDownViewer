@@ -30,6 +30,7 @@ export default class MarkdownViewer extends React.Component<IMarkdownViewerProps
                 <div id="mdViewer">
                     <div className="wmde-markdown-var"> </div>
                     <MarkdownPreview
+                        id="mdMarkDown"
                         source={this.props.content || ''}
                         style={{
                             background: "transparent"

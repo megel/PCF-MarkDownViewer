@@ -68,9 +68,11 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 		// Update the control's output property with the calculated dimensions
 		const contentHeight = this.calculateContentHeight();
 		const contentWidth = this.calculateContentWidth();
+		const contentAsHtml = this.getHtmlContent();
 		if (this._outputs.ContentHeight !== contentHeight || this._outputs.ContentWidth !== contentWidth) {
 			this._outputs.ContentHeight = contentHeight;
 			this._outputs.ContentWidth = contentWidth;
+			this._outputs.ContentAsHtml = contentAsHtml;
 			this.notifyOutputChanged();
 		}
 	}
@@ -109,4 +111,9 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
         // Calculate the height of the content element
         return contentElement?.clientWidth || 0;
     }
+	
+	public getHtmlContent(): string {
+		// Get the HTML content element within your control
+		return  document.getElementById("mdMarkDown")?.innerHTML;
+	}
 }
