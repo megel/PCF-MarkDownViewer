@@ -50,6 +50,7 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 	public updateView(context: ComponentFramework.Context<IInputs>): void
 	{
 		// Add code to update control view
+		const hasChangedContent = context.parameters.Content.raw !== this.props.content;
 		this.props.content   = context.parameters.Content.raw  || this.props.content;
 		this.props.fontSize  = context.parameters.FontSize.raw || this.props.fontSize;
 		this.props.overflow  = context.parameters.Overflow.raw || this.props.overflow;
@@ -68,9 +69,11 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 		// Update the control's output property with the calculated dimensions
 		const contentHeight = this.calculateContentHeight();
 		const contentWidth = this.calculateContentWidth();
-		if (this._outputs.ContentHeight !== contentHeight || this._outputs.ContentWidth !== contentWidth) {
+		const contentAsHtml = this.getHtmlContent();
+		if (this._outputs.ContentHeight !== contentHeight || this._outputs.ContentWidth !== contentWidth || hasChangedContent) {
 			this._outputs.ContentHeight = contentHeight;
 			this._outputs.ContentWidth = contentWidth;
+			this._outputs.ContentAsHtml = contentAsHtml;
 			this.notifyOutputChanged();
 		}
 	}
@@ -84,6 +87,7 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 		// Update the control's output property with the calculated dimensions
 		this._outputs.ContentHeight = this.calculateContentHeight();
 		this._outputs.ContentWidth = this.calculateContentWidth();
+		this._outputs.ContentAsHtml = this.getHtmlContent();
 		return this._outputs;
 	}
 
@@ -109,4 +113,9 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
         // Calculate the height of the content element
         return contentElement?.clientWidth || 0;
     }
+	
+	public getHtmlContent(): string {
+		// Get the HTML content from node with class wmde-markdown
+		return document.querySelector(".wmde-markdown")?.innerHTML ?? "";
+	}
 }

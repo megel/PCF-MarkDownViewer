@@ -2,14 +2,14 @@
     "version": "0.2.0",
     "configurations": [
       {
+        "request": "launch",
         "name": "Debug PCF Control",
         "type": "chrome",
-        "request": "launch",
         "url": "http://localhost:8181",  // Update with the appropriate URL for your PCF control
         "webRoot": "${workspaceFolder}/src",
         "sourceMapPathOverrides": {
           "webpack:///./~/*": "${workspaceFolder}/node_modules/*"
-        },
+        }
       }
     ]
   }
