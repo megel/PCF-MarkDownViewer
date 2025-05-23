@@ -8,12 +8,17 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 	private mContainer: HTMLDivElement;
 	private props: IMarkdownViewerProps = {
 		content:  "# This is a header\n\nAnd this is a paragraph\n\n* Item 1\n* Item 2\n\n**Code Example** (PowerShell):\n\n```PowerShell\nGet-ChildItem -Path \"C:\\Temp\" -Filter \"*.txt\" -Recurse\n```\n",
-		fontSize: "Initial",
-		overflow: "None"
+	fontSize: "Initial",
+	overflow: "None",
+	label: undefined,
+	visible: true,
+	disabled: false,
+	tabIndex: undefined,
+	tooltip: undefined
 	}
 
 	private _outputs: IOutputs = {
-    };
+	};
 	notifyOutputChanged: () => void;
 
 	/**
@@ -37,9 +42,14 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 		this.mContainer = container;
 		context.mode.trackContainerResize(true);
 		this.notifyOutputChanged = notifyOutputChanged;
-		this.props.content  = context.parameters.Content.raw  || this.props.content;
-		this.props.fontSize = context.parameters.FontSize.raw || this.props.fontSize;
-		this.props.overflow = context.parameters.Overflow.raw || this.props.overflow;
+	this.props.content  = context.parameters.Content.raw  || this.props.content;
+	this.props.fontSize = context.parameters.FontSize.raw || this.props.fontSize;
+	this.props.overflow = context.parameters.Overflow.raw || this.props.overflow;
+	this.props.label    = context.parameters.Label?.raw ?? this.props.label;
+	this.props.visible  = context.parameters.Visible?.raw ?? this.props.visible;
+	this.props.disabled = context.parameters.Disabled?.raw ?? this.props.disabled;
+	this.props.tabIndex = context.parameters.TabIndex?.raw ?? this.props.tabIndex;
+	this.props.tooltip  = context.parameters.Tooltip?.raw ?? this.props.tooltip;
 	}
 
 
@@ -54,6 +64,11 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 		this.props.content   = context.parameters.Content.raw  || this.props.content;
 		this.props.fontSize  = context.parameters.FontSize.raw || this.props.fontSize;
 		this.props.overflow  = context.parameters.Overflow.raw || this.props.overflow;
+		this.props.label     = context.parameters.Label?.raw ?? this.props.label;
+		this.props.visible   = context.parameters.Visible?.raw ?? this.props.visible;
+		this.props.disabled  = context.parameters.Disabled?.raw ?? this.props.disabled;
+		this.props.tabIndex  = context.parameters.TabIndex?.raw ?? this.props.tabIndex;
+		this.props.tooltip   = context.parameters.Tooltip?.raw ?? this.props.tooltip;
 		try {
 			this.props.maxHeight = context?.mode?.allocatedHeight > 0 ? context.mode.allocatedHeight + "px" : "400px";
 			this.props.maxWidth  = context?.mode?.allocatedWidth  > 0 ? context.mode.allocatedWidth  + "px" : "800px";
@@ -100,19 +115,19 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
 		ReactDOM.unmountComponentAtNode(this.mContainer);
 	}
 
-    private calculateContentHeight(): number {
-        // Get the HTML content element within your control
-        const contentElement = document.getElementById("mdViewer");
-        // Calculate the height of the content element
-        return contentElement?.clientHeight || 0;
-    }
+	private calculateContentHeight(): number {
+		// Get the HTML content element within your control
+		const contentElement = document.getElementById("mdViewer");
+		// Calculate the height of the content element
+		return contentElement?.clientHeight || 0;
+	}
 
 	private calculateContentWidth(): number {
-        // Get the HTML content element within your control
-        const contentElement = document.getElementById("mdViewer");    
-        // Calculate the height of the content element
-        return contentElement?.clientWidth || 0;
-    }
+		// Get the HTML content element within your control
+		const contentElement = document.getElementById("mdViewer");    
+		// Calculate the height of the content element
+		return contentElement?.clientWidth || 0;
+	}
 	
 	public getHtmlContent(): string {
 		// Get the HTML content from node with class wmde-markdown
