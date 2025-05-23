@@ -1,17 +1,3 @@
-      - name: Build and package PCF solution
-        working-directory: ./src/solution
-        run: |
-          msbuild /t:build /restore
-          name="MarkDownViewer_managed_pr_validation.zip"
-          artifact="./src/solution/bin/Debug/$name"
-          echo "Artifact:  $artifact"
-          mv ./bin/Debug/solution.zip "./bin/Debug/$name"
-
-      - name: Archive Solution
-        uses: actions/upload-artifact@v4
-        with:
-          name: Artifacts
-          path: ./src/solution/bin/Debug/MarkDownViewer_managed_pr_validation.zip
 name: PR Validation
 
 on:
