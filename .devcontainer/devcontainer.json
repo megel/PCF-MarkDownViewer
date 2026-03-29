@@ -1,0 +1,26 @@
+{
+    "name": "PCF TypeScript DevContainer",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/github-cli": {},
+        "ghcr.io/devcontainers/features/docker-in-docker": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.vscode-typescript-next",
+                "ms-azuretools.vscode-docker",
+                "esbenp.prettier-vscode"
+            ],
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/bash",
+                "typescript.tsdk": "/home/vscode/.vscode/extensions/ms-vscode.vscode-typescript-next-*/out/node_modules/typescript/lib"
+            }
+        }
+    },
+    "postCreateCommand": "npm install --prefix src"
+}
