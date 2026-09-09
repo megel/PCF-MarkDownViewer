@@ -166,8 +166,13 @@ jobs:
           NEW_VERSION="${{ steps.new_version.outputs.new_version }}"
           
           git add src/package.json src/solution/src/Other/Solution.xml
-          git commit -m "chore: release $NEW_VERSION"
-          git push origin master
+
+          if git diff --staged --quiet; then
+            echo "No version changes detected; skipping commit/push."
+          else
+            git commit -m "chore: release $NEW_VERSION"
+            git push origin master
+          fi
           
       - name: Create and push tag
         id: create_tag
