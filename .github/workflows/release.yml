@@ -25,6 +25,7 @@ concurrency:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   create-release:
@@ -166,17 +167,43 @@ jobs:
           grep "<Version>" src/solution/src/Other/Solution.xml
           
       - name: Commit version updates
+        id: commit_version
         run: |
           NEW_VERSION="${{ steps.new_version.outputs.new_version }}"
-          
+          BRANCH_NAME="release/${NEW_VERSION}-version-bump"
+
           git add src/package.json src/solution/src/Other/Solution.xml
 
           if git diff --staged --quiet; then
             echo "No version changes detected; skipping commit/push."
+            echo "version_bump_needed=false" >> $GITHUB_OUTPUT
           else
+            git checkout -b "$BRANCH_NAME"
             git commit -m "chore: release $NEW_VERSION"
-            git push origin master
+            git push origin "$BRANCH_NAME"
+            echo "version_bump_needed=true" >> $GITHUB_OUTPUT
+            echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
           fi
+
+      - name: Open and merge version bump PR
+        if: steps.commit_version.outputs.version_bump_needed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NEW_VERSION="${{ steps.new_version.outputs.new_version }}"
+          BRANCH_NAME="${{ steps.commit_version.outputs.branch_name }}"
+
+          # master is a protected branch that only accepts changes through pull
+          # requests, so the version bump commit is merged via a PR instead of
+          # being pushed to master directly.
+          PR_URL=$(gh pr create --base master --head "$BRANCH_NAME" \
+            --title "chore: release $NEW_VERSION" \
+            --body "Automated version bump for release $NEW_VERSION.")
+
+          gh pr merge "$PR_URL" --merge --delete-branch
+
+          git checkout master
+          git pull origin master
           
       - name: Create and push tag
         id: create_tag
