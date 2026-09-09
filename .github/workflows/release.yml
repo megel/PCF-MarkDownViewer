@@ -1,0 +1,234 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_bump:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - custom
+        default: 'patch'
+      custom_version:
+        description: 'Custom version (e.g., 2.0.0) - only used if version_bump is "custom"'
+        required: false
+        type: string
+
+# Prevent concurrent release operations
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history and tags
+          
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+      - name: Get latest tag
+        id: get_latest_tag
+        run: |
+          # Get all tags matching vX.Y.Z pattern, sort them, and get the latest
+          LATEST_TAG=$(git tag -l "v*.*.*" | sort -V | tail -n 1)
+          
+          if [ -z "$LATEST_TAG" ]; then
+            echo "No existing tags found, will create v1.0.0 or higher"
+            LATEST_TAG="v0.9.999"
+          fi
+          
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+          echo "Latest tag found: $LATEST_TAG"
+          
+      - name: Calculate new version
+        id: new_version
+        run: |
+          LATEST_TAG="${{ steps.get_latest_tag.outputs.latest_tag }}"
+          BUMP_TYPE="${{ github.event.inputs.version_bump }}"
+          CUSTOM_VERSION="${{ github.event.inputs.custom_version }}"
+          
+          # Check if this is the first version (no tags yet)
+          if [ "$LATEST_TAG" = "v0.9.999" ]; then
+            # For first release, default to v1.0.0 unless custom specified
+            if [ "$BUMP_TYPE" = "custom" ]; then
+              if [ -z "$CUSTOM_VERSION" ]; then
+                echo "Error: Custom version is required when version_bump is 'custom'"
+                exit 1
+              fi
+              NEW_VERSION="v$CUSTOM_VERSION"
+            else
+              NEW_VERSION="v1.0.0"
+              echo "First release, creating version v1.0.0"
+            fi
+          else
+            # Remove 'v' prefix and split into components
+            VERSION=${LATEST_TAG#v}
+            MAJOR=$(echo $VERSION | cut -d. -f1)
+            MINOR=$(echo $VERSION | cut -d. -f2)
+            PATCH=$(echo $VERSION | cut -d. -f3)
+            
+            if [ "$BUMP_TYPE" = "custom" ]; then
+              if [ -z "$CUSTOM_VERSION" ]; then
+                echo "Error: Custom version is required when version_bump is 'custom'"
+                exit 1
+              fi
+              NEW_VERSION="v$CUSTOM_VERSION"
+            elif [ "$BUMP_TYPE" = "major" ]; then
+              NEW_MAJOR=$((MAJOR + 1))
+              NEW_VERSION="v${NEW_MAJOR}.0.0"
+            elif [ "$BUMP_TYPE" = "minor" ]; then
+              NEW_MINOR=$((MINOR + 1))
+              NEW_VERSION="v${MAJOR}.${NEW_MINOR}.0"
+            else  # patch
+              NEW_PATCH=$((PATCH + 1))
+              NEW_VERSION="v${MAJOR}.${MINOR}.${NEW_PATCH}"
+            fi
+          fi
+          
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
+          echo "New version will be: $NEW_VERSION (bump type: $BUMP_TYPE)"
+          
+      - name: Check if tag already exists
+        id: check_tag
+        run: |
+          NEW_VERSION="${{ steps.new_version.outputs.new_version }}"
+          
+          if git rev-parse "$NEW_VERSION" >/dev/null 2>&1; then
+            echo "Error: Tag $NEW_VERSION already exists"
+            exit 1
+          fi
+          
+          echo "Tag $NEW_VERSION does not exist, proceeding with release"
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: src/package-lock.json
+          
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '6.x'
+          
+      - name: Install Power Platform CLI
+        run: |
+          dotnet tool install --global Microsoft.PowerApps.CLI.Tool
+          
+      - name: Update package.json version
+        run: |
+          NEW_VERSION="${{ steps.new_version.outputs.new_version }}"
+          VERSION_NO_V=${NEW_VERSION#v}
+          
+          # Update package.json using jq for safe JSON manipulation
+          # Note: jq is pre-installed on ubuntu-latest runners
+          jq --arg version "$VERSION_NO_V" '.version = $version' src/package.json > src/package.json.tmp
+          mv src/package.json.tmp src/package.json
+          
+          echo "Updated package.json to version $VERSION_NO_V"
+          cat src/package.json | grep version
+          
+      - name: Update Solution.xml version
+        run: |
+          NEW_VERSION="${{ steps.new_version.outputs.new_version }}"
+          VERSION_NO_V=${NEW_VERSION#v}
+          
+          # Update Solution.xml (format: X.Y for PowerApps)
+          MAJOR=$(echo $VERSION_NO_V | cut -d. -f1)
+          MINOR=$(echo $VERSION_NO_V | cut -d. -f2)
+          SOLUTION_VERSION="${MAJOR}.${MINOR}"
+          
+          # Update the Version element in Solution.xml
+          sed -i "s|<Version>[^<]*</Version>|<Version>$SOLUTION_VERSION</Version>|" src/solution/src/Other/Solution.xml
+          
+          echo "Updated Solution.xml to version $SOLUTION_VERSION"
+          grep "<Version>" src/solution/src/Other/Solution.xml
+          
+      - name: Commit version updates
+        run: |
+          NEW_VERSION="${{ steps.new_version.outputs.new_version }}"
+          
+          git add src/package.json src/solution/src/Other/Solution.xml
+          git commit -m "chore: release $NEW_VERSION"
+          git push origin master
+          
+      - name: Create and push tag
+        id: create_tag
+        run: |
+          NEW_VERSION="${{ steps.new_version.outputs.new_version }}"
+          BUMP_TYPE="${{ steps.new_version.outputs.bump_type }}"
+          
+          # Create annotated tag
+          git tag -a "$NEW_VERSION" -m "Release $NEW_VERSION ($BUMP_TYPE)"
+          
+          # Push tag
+          git push origin "$NEW_VERSION"
+          
+          COMMIT_SHA=$(git rev-parse HEAD)
+          echo "tag_name=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "commit_sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
+          echo "Created and pushed tag $NEW_VERSION at commit $COMMIT_SHA"
+          
+      - name: Install dependencies
+        working-directory: ./src
+        run: npm ci
+        
+      - name: Build PCF control
+        working-directory: ./src
+        run: npm run build
+        
+      - name: Build solution
+        run: |
+          export PATH="$PATH:$HOME/.dotnet/tools"
+          cd src/solution
+          dotnet build /p:configuration=Release
+          
+      - name: Rename solution artifact
+        id: rename_artifact
+        run: |
+          NEW_VERSION="${{ steps.create_tag.outputs.tag_name }}"
+          VERSION_NO_V=${NEW_VERSION#v}
+          
+          SOURCE_ZIP=$(find src/solution/bin/Release -maxdepth 1 -iname "*_managed.zip" | head -n 1)
+          if [ -z "$SOURCE_ZIP" ]; then
+            SOURCE_ZIP=$(find src/solution/bin/Release -maxdepth 1 -iname "*.zip" | head -n 1)
+          fi
+          
+          if [ -z "$SOURCE_ZIP" ]; then
+            echo "Error: No solution zip found in src/solution/bin/Release"
+            exit 1
+          fi
+          
+          TARGET_ZIP="src/solution/bin/Release/PCF-MarkDownViewer-${VERSION_NO_V}.zip"
+          cp "$SOURCE_ZIP" "$TARGET_ZIP"
+          
+          echo "artifact_path=$TARGET_ZIP" >> $GITHUB_OUTPUT
+          echo "Renamed solution artifact from $SOURCE_ZIP to $TARGET_ZIP"
+          
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.create_tag.outputs.tag_name }}
+          name: Release ${{ steps.create_tag.outputs.tag_name }}
+          generate_release_notes: true
+          files: |
+            ${{ steps.rename_artifact.outputs.artifact_path }}
+          draft: false
+          prerelease: false
