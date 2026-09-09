@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master  # Workflow execution will be triggered when code is pushed to the "main" branch
+    paths:
+      - 'src/**'
+      - '.github/workflows/pcf_build.yml'
 
   release:
     types:

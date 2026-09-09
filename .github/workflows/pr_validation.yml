@@ -5,6 +5,9 @@ on:
     branches:
       - master
       - main
+    paths:
+      - 'src/**'
+      - '.github/workflows/pr_validation.yml'
 
 jobs:
   validate:
