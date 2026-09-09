@@ -120,10 +120,13 @@ jobs:
           git add src/package.json src/solution/src/Other/Solution.xml
 
           if git diff --staged --quiet; then
-            echo "No version changes detected; skipping commit/push."
+            echo "No version changes detected; skipping commit."
           else
+            # NOTE: master is a protected branch that requires changes via pull
+            # request, so we intentionally do not push this commit to master.
+            # The commit only exists locally so the version bump files are
+            # captured by the tag created in the next step.
             git commit -m "chore: bump version to $NEW_VERSION"
-            git push origin master
           fi
           
       - name: Create and push tag
