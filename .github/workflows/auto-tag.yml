@@ -1,0 +1,141 @@
+name: Auto Tag on Main
+
+on:
+  workflow_run:
+    workflows: ["PCF Solution Build"]
+    types:
+      - completed
+    branches:
+      - master
+
+# Prevent concurrent tagging operations
+concurrency:
+  group: auto-tag
+  cancel-in-progress: false
+
+jobs:
+  auto-tag:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history and tags
+          
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+      - name: Get latest tag
+        id: get_latest_tag
+        run: |
+          # Get all tags matching vX.Y.Z pattern, sort them, and get the latest
+          LATEST_TAG=$(git tag -l "v*.*.*" | sort -V | tail -n 1)
+          
+          if [ -z "$LATEST_TAG" ]; then
+            echo "No existing tags found, will create v1.0.0"
+            LATEST_TAG="v0.9.999"
+          fi
+          
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+          echo "Latest tag found: $LATEST_TAG"
+          
+      - name: Increment patch version
+        id: increment_version
+        run: |
+          LATEST_TAG="${{ steps.get_latest_tag.outputs.latest_tag }}"
+          
+          # Check if this is the first version (no tags yet)
+          if [ "$LATEST_TAG" = "v0.9.999" ]; then
+            NEW_VERSION="v1.0.0"
+            echo "First release, creating version v1.0.0"
+          else
+            # Remove 'v' prefix and split into components
+            VERSION=${LATEST_TAG#v}
+            MAJOR=$(echo $VERSION | cut -d. -f1)
+            MINOR=$(echo $VERSION | cut -d. -f2)
+            PATCH=$(echo $VERSION | cut -d. -f3)
+            
+            # Increment patch version
+            NEW_PATCH=$((PATCH + 1))
+            NEW_VERSION="v${MAJOR}.${MINOR}.${NEW_PATCH}"
+          fi
+          
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "New version will be: $NEW_VERSION"
+          
+      - name: Check if tag already exists
+        id: check_tag
+        run: |
+          NEW_VERSION="${{ steps.increment_version.outputs.new_version }}"
+          
+          if git rev-parse "$NEW_VERSION" >/dev/null 2>&1; then
+            echo "Tag $NEW_VERSION already exists, skipping"
+            echo "tag_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Tag $NEW_VERSION does not exist, will create"
+            echo "tag_exists=false" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Update package.json version
+        if: steps.check_tag.outputs.tag_exists == 'false'
+        run: |
+          NEW_VERSION="${{ steps.increment_version.outputs.new_version }}"
+          VERSION_NO_V=${NEW_VERSION#v}
+          
+          # Update package.json using jq for safe JSON manipulation
+          # Note: jq is pre-installed on ubuntu-latest runners
+          jq --arg version "$VERSION_NO_V" '.version = $version' src/package.json > src/package.json.tmp
+          mv src/package.json.tmp src/package.json
+          
+          echo "Updated package.json to version $VERSION_NO_V"
+          
+      - name: Update Solution.xml version
+        if: steps.check_tag.outputs.tag_exists == 'false'
+        run: |
+          NEW_VERSION="${{ steps.increment_version.outputs.new_version }}"
+          VERSION_NO_V=${NEW_VERSION#v}
+          
+          # Update Solution.xml (format: X.Y without patch for PowerApps)
+          MAJOR=$(echo $VERSION_NO_V | cut -d. -f1)
+          MINOR=$(echo $VERSION_NO_V | cut -d. -f2)
+          SOLUTION_VERSION="${MAJOR}.${MINOR}"
+          
+          # Update the Version element in Solution.xml
+          sed -i "s|<Version>[^<]*</Version>|<Version>$SOLUTION_VERSION</Version>|" src/solution/src/Other/Solution.xml
+          
+          echo "Updated Solution.xml to version $SOLUTION_VERSION"
+          
+      - name: Commit version updates
+        if: steps.check_tag.outputs.tag_exists == 'false'
+        run: |
+          NEW_VERSION="${{ steps.increment_version.outputs.new_version }}"
+          
+          git add src/package.json src/solution/src/Other/Solution.xml
+
+          if git diff --staged --quiet; then
+            echo "No version changes detected; skipping commit/push."
+          else
+            git commit -m "chore: bump version to $NEW_VERSION"
+            git push origin master
+          fi
+          
+      - name: Create and push tag
+        if: steps.check_tag.outputs.tag_exists == 'false'
+        run: |
+          NEW_VERSION="${{ steps.increment_version.outputs.new_version }}"
+          COMMIT_SHA=$(git rev-parse HEAD)
+          
+          # Create annotated tag
+          git tag -a "$NEW_VERSION" -m "Automatic release $NEW_VERSION"
+          
+          # Push tag
+          git push origin "$NEW_VERSION"
+          
+          echo "Created and pushed tag $NEW_VERSION at commit $COMMIT_SHA"
