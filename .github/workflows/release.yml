@@ -200,7 +200,7 @@ jobs:
             --title "chore: release $NEW_VERSION" \
             --body "Automated version bump for release $NEW_VERSION.")
 
-          gh pr merge "$PR_URL" --merge --delete-branch
+          gh pr merge "$PR_URL" --squash --delete-branch
 
           git checkout master
           git pull origin master
