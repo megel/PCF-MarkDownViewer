@@ -34,10 +34,12 @@ export default class MarkdownViewer extends React.Component<IMarkdownViewerProps
                     width:     this.props.maxWidth  || "initial",
                     maxHeight: this.props.maxHeight || "none",
                     maxWidth:  this.props.maxWidth  || "none",
-                    userSelect: "text"
+                    userSelect: "text",
+                    pointerEvents: this.props.disabled ? "none" : "auto"
                 }}
-                tabIndex={this.props.tabIndex}
+                tabIndex={this.props.disabled ? -1 : this.props.tabIndex}
                 aria-label={this.props.label}
+                aria-disabled={this.props.disabled}
                 title={this.props.tooltip}
             >
                 {this.props.label && (
@@ -55,8 +57,15 @@ export default class MarkdownViewer extends React.Component<IMarkdownViewerProps
                             if (node.tagName === "a" && parent && /^h(1|2|3|4|5|6)/.test(parent.tagName)) {
                                 parent.children = parent.children.slice(1)
                             }
+                            if (this.props.disabled && node.tagName === "a") {
+                                node.properties = {
+                                    ...node.properties,
+                                    href: undefined,
+                                    tabIndex: -1,
+                                    "aria-disabled": true
+                                }
+                            }
                         }}
-                        disabled={this.props.disabled}
                     />
                 </div>
             </div>
