@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="MarkDownViewer" xml:space="preserve">
+    <value>MarkDown Viewer</value>
+  </data>
+  <data name="MarkDownViewer_Desc" xml:space="preserve">
+    <value>PCF control to render markdown content in Model Driven Apps.</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="Content_Desc" xml:space="preserve">
+    <value>The MarkDown content as text.</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Font Size</value>
+  </data>
+  <data name="Size_Desc" xml:space="preserve">
+    <value>CSS Font Size for the markdown content.</value>
+  </data>
+  <data name="Initial" xml:space="preserve">
+    <value>Initial</value>
+  </data>
+  <data name="Initial_Desc" xml:space="preserve">
+    <value>Default font size.</value>
+  </data>
+  <data name="Smaller" xml:space="preserve">
+    <value>Smaller</value>
+  </data>
+  <data name="Smaller_Desc" xml:space="preserve">
+    <value>Smaller font size.</value>
+  </data>
+  <data name="Small" xml:space="preserve">
+    <value>Small</value>
+  </data>
+  <data name="Small_Desc" xml:space="preserve">
+    <value>Small font size.</value>
+  </data>
+  <data name="XSmall" xml:space="preserve">
+    <value>X-Small</value>
+  </data>
+  <data name="XSmall_Desc" xml:space="preserve">
+    <value>Extra small font size.</value>
+  </data>
+  <data name="XXSmall" xml:space="preserve">
+    <value>XX-Small</value>
+  </data>
+  <data name="XXSmall_Desc" xml:space="preserve">
+    <value>Double extra small font size.</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="Medium_Desc" xml:space="preserve">
+    <value>Medium font size.</value>
+  </data>
+  <data name="Large" xml:space="preserve">
+    <value>Large</value>
+  </data>
+  <data name="Large_Desc" xml:space="preserve">
+    <value>Large font size.</value>
+  </data>
+  <data name="Larger" xml:space="preserve">
+    <value>Larger</value>
+  </data>
+  <data name="Larger_Desc" xml:space="preserve">
+    <value>Larger font size.</value>
+  </data>
+  <data name="XLarge" xml:space="preserve">
+    <value>X-Large</value>
+  </data>
+  <data name="XLarge_Desc" xml:space="preserve">
+    <value>Extra large font size.</value>
+  </data>
+  <data name="XXLarge" xml:space="preserve">
+    <value>XX-Large</value>
+  </data>
+  <data name="XXLarge_Desc" xml:space="preserve">
+    <value>Double extra large font size.</value>
+  </data>
+  <data name="Overflow" xml:space="preserve">
+    <value>Overflow</value>
+  </data>
+  <data name="Overflow_Desc" xml:space="preserve">
+    <value>The CSS scrollbar behavior for the control.</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="None_Desc" xml:space="preserve">
+    <value>No overflow (content will be clipped).</value>
+  </data>
+  <data name="Auto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="Auto_Desc" xml:space="preserve">
+    <value>Overflow automatically adds scrollbars if needed.</value>
+  </data>
+  <data name="Scroll" xml:space="preserve">
+    <value>Scroll</value>
+  </data>
+  <data name="Scroll_Desc" xml:space="preserve">
+    <value>Always show scrollbars for overflow.</value>
+  </data>
+  <data name="Label" xml:space="preserve">
+    <value>Label</value>
+  </data>
+  <data name="Label_Desc" xml:space="preserve">
+    <value>Field label for the control.</value>
+  </data>
+  <data name="Visible" xml:space="preserve">
+    <value>Visible</value>
+  </data>
+  <data name="Visible_Desc" xml:space="preserve">
+    <value>Show or hide the control.</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="Disabled_Desc" xml:space="preserve">
+    <value>Make the control read-only.</value>
+  </data>
+  <data name="TabIndex" xml:space="preserve">
+    <value>Tab Index</value>
+  </data>
+  <data name="TabIndex_Desc" xml:space="preserve">
+    <value>Tab order for accessibility.</value>
+  </data>
+  <data name="Tooltip" xml:space="preserve">
+    <value>Tooltip</value>
+  </data>
+  <data name="Tooltip_Desc" xml:space="preserve">
+    <value>Tooltip/help text for the control.</value>
+  </data>
+</root>
