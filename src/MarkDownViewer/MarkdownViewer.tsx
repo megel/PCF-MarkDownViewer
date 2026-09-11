@@ -20,6 +20,8 @@ export default class MarkdownViewer extends React.Component<IMarkdownViewerProps
     content?: string | undefined
 
     public render() {
+        const content = this.props.content ?? '';
+        const hasContent = content.trim().length > 0;
 
         if (this.props.visible === false) {
             return null;
@@ -47,26 +49,32 @@ export default class MarkdownViewer extends React.Component<IMarkdownViewerProps
                 )}
                 <div id="mdViewer">
                     <div className="wmde-markdown-var"> </div>
-                    <MarkdownPreview
-                        id="mdMarkDown"
-                        source={this.props.content || ''}
-                        style={{
-                            background: "transparent"
-                        }}
-                        rehypeRewrite={(node: any, index: any, parent: any) => {
-                            if (node.tagName === "a" && parent && /^h(1|2|3|4|5|6)/.test(parent.tagName)) {
-                                parent.children = parent.children.slice(1)
-                            }
-                            if (this.props.disabled && node.tagName === "a") {
-                                node.properties = {
-                                    ...node.properties,
-                                    href: undefined,
-                                    tabIndex: -1,
-                                    "aria-disabled": true
+                    {hasContent ? (
+                        <MarkdownPreview
+                            id="mdMarkDown"
+                            source={content}
+                            style={{
+                                background: "transparent"
+                            }}
+                            rehypeRewrite={(node: any, index: any, parent: any) => {
+                                if (node.tagName === "a" && parent && /^h(1|2|3|4|5|6)/.test(parent.tagName)) {
+                                    parent.children = parent.children.slice(1)
                                 }
-                            }
-                        }}
-                    />
+                                if (this.props.disabled && node.tagName === "a") {
+                                    node.properties = {
+                                        ...node.properties,
+                                        href: undefined,
+                                        tabIndex: -1,
+                                        "aria-disabled": true
+                                    }
+                                }
+                            }}
+                        />
+                    ) : (
+                        <div style={{ color: '#7a7a7a', padding: '20px 16px' }}>
+                            No markdown content provided
+                        </div>
+                    )}
                 </div>
             </div>
         );
