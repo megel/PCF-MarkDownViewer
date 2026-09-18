@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="MarkDownViewer" xml:space="preserve">
+    <value>MarkDown Viewer</value>
+  </data>
+  <data name="MarkDownViewer_Desc" xml:space="preserve">
+    <value>PCF-Steuerelement zum Anzeigen von Markdown-Inhalten in modellgesteuerten Apps.</value>
+  </data>
+  <data name="Content" xml:space="preserve">
+    <value>Inhalt</value>
+  </data>
+  <data name="Content_Desc" xml:space="preserve">
+    <value>Der Markdown-Inhalt als Text.</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Schriftgröße</value>
+  </data>
+  <data name="Size_Desc" xml:space="preserve">
+    <value>CSS-Schriftgröße für den Markdown-Inhalt.</value>
+  </data>
+  <data name="Initial" xml:space="preserve">
+    <value>Initial</value>
+  </data>
+  <data name="Initial_Desc" xml:space="preserve">
+    <value>Standard-Schriftgröße.</value>
+  </data>
+  <data name="Smaller" xml:space="preserve">
+    <value>Smaller</value>
+  </data>
+  <data name="Smaller_Desc" xml:space="preserve">
+    <value>Kleinere Schriftgröße.</value>
+  </data>
+  <data name="Small" xml:space="preserve">
+    <value>Small</value>
+  </data>
+  <data name="Small_Desc" xml:space="preserve">
+    <value>Kleine Schriftgröße.</value>
+  </data>
+  <data name="XSmall" xml:space="preserve">
+    <value>X-Small</value>
+  </data>
+  <data name="XSmall_Desc" xml:space="preserve">
+    <value>Sehr kleine Schriftgröße.</value>
+  </data>
+  <data name="XXSmall" xml:space="preserve">
+    <value>XX-Small</value>
+  </data>
+  <data name="XXSmall_Desc" xml:space="preserve">
+    <value>Doppelt sehr kleine Schriftgröße.</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="Medium_Desc" xml:space="preserve">
+    <value>Mittlere Schriftgröße.</value>
+  </data>
+  <data name="Large" xml:space="preserve">
+    <value>Large</value>
+  </data>
+  <data name="Large_Desc" xml:space="preserve">
+    <value>Große Schriftgröße.</value>
+  </data>
+  <data name="Larger" xml:space="preserve">
+    <value>Larger</value>
+  </data>
+  <data name="Larger_Desc" xml:space="preserve">
+    <value>Größere Schriftgröße.</value>
+  </data>
+  <data name="XLarge" xml:space="preserve">
+    <value>X-Large</value>
+  </data>
+  <data name="XLarge_Desc" xml:space="preserve">
+    <value>Sehr große Schriftgröße.</value>
+  </data>
+  <data name="XXLarge" xml:space="preserve">
+    <value>XX-Large</value>
+  </data>
+  <data name="XXLarge_Desc" xml:space="preserve">
+    <value>Doppelt sehr große Schriftgröße.</value>
+  </data>
+  <data name="Overflow" xml:space="preserve">
+    <value>Überlauf</value>
+  </data>
+  <data name="Overflow_Desc" xml:space="preserve">
+    <value>Das CSS-Scrollbalkenverhalten für das Steuerelement.</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="None_Desc" xml:space="preserve">
+    <value>Kein Überlauf (Inhalt wird abgeschnitten).</value>
+  </data>
+  <data name="Auto" xml:space="preserve">
+    <value>Auto</value>
+  </data>
+  <data name="Auto_Desc" xml:space="preserve">
+    <value>Überlauf fügt bei Bedarf automatisch Scrollbalken hinzu.</value>
+  </data>
+  <data name="Scroll" xml:space="preserve">
+    <value>Scroll</value>
+  </data>
+  <data name="Scroll_Desc" xml:space="preserve">
+    <value>Scrollbalken für Überlauf immer anzeigen.</value>
+  </data>
+  <data name="Label" xml:space="preserve">
+    <value>Beschriftung</value>
+  </data>
+  <data name="Label_Desc" xml:space="preserve">
+    <value>Feldbeschriftung für das Steuerelement.</value>
+  </data>
+  <data name="Visible" xml:space="preserve">
+    <value>Sichtbar</value>
+  </data>
+  <data name="Visible_Desc" xml:space="preserve">
+    <value>Steuerelement anzeigen oder ausblenden.</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Deaktiviert</value>
+  </data>
+  <data name="Disabled_Desc" xml:space="preserve">
+    <value>Steuerelement schreibgeschützt machen.</value>
+  </data>
+  <data name="TabIndex" xml:space="preserve">
+    <value>Tabulatorreihenfolge</value>
+  </data>
+  <data name="TabIndex_Desc" xml:space="preserve">
+    <value>Tabulatorreihenfolge für Barrierefreiheit.</value>
+  </data>
+  <data name="Tooltip" xml:space="preserve">
+    <value>Tooltip</value>
+  </data>
+  <data name="Tooltip_Desc" xml:space="preserve">
+    <value>Tooltip/Hilfetext für das Steuerelement.</value>
+  </data>
+</root>
