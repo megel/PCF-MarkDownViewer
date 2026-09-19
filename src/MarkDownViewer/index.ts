@@ -39,11 +39,11 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
         this.props.content = context.parameters.Content.raw || this.props.content;
         this.props.fontSize = context.parameters.FontSize.raw || this.props.fontSize;
         this.props.overflow = context.parameters.Overflow.raw || this.props.overflow;
-        this.props.label = context.parameters.Label?.raw ?? this.props.label;
-        this.props.visible = context.parameters.Visible?.raw ?? this.props.visible;
-        this.props.disabled = context.parameters.Disabled?.raw ?? this.props.disabled;
-        this.props.tabIndex = context.parameters.TabIndex?.raw ?? this.props.tabIndex;
-        this.props.tooltip = context.parameters.Tooltip?.raw ?? this.props.tooltip;
+        this.props.label = context.parameters.CustomLabel?.raw ?? this.props.label;
+        this.props.visible = context.parameters.ShowControl?.raw ?? this.props.visible;
+        this.props.disabled = context.parameters.DisableControl?.raw ?? this.props.disabled;
+        this.props.tabIndex = context.parameters.ControlTabIndex?.raw ?? this.props.tabIndex;
+        this.props.tooltip = context.parameters.CustomTooltip?.raw ?? this.props.tooltip;
     }
 
     /**
@@ -56,11 +56,11 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
         this.props.content = context.parameters.Content.raw || "";
         this.props.fontSize = context.parameters.FontSize.raw || this.props.fontSize;
         this.props.overflow = context.parameters.Overflow.raw || this.props.overflow;
-        this.props.label = context.parameters.Label?.raw ?? this.props.label;
-        this.props.visible = context.parameters.Visible?.raw ?? this.props.visible;
-        this.props.disabled = context.parameters.Disabled?.raw ?? this.props.disabled;
-        this.props.tabIndex = context.parameters.TabIndex?.raw ?? this.props.tabIndex;
-        this.props.tooltip = context.parameters.Tooltip?.raw ?? this.props.tooltip;
+        this.props.label = context.parameters.CustomLabel?.raw ?? this.props.label;
+        this.props.visible = context.parameters.ShowControl?.raw ?? this.props.visible;
+        this.props.disabled = context.parameters.DisableControl?.raw ?? this.props.disabled;
+        this.props.tabIndex = context.parameters.ControlTabIndex?.raw ?? this.props.tabIndex;
+        this.props.tooltip = context.parameters.CustomTooltip?.raw ?? this.props.tooltip;
         try {
             this.props.maxHeight = context?.mode?.allocatedHeight > 0 ? context.mode.allocatedHeight + "px" : "400px";
             this.props.maxWidth = context?.mode?.allocatedWidth > 0 ? context.mode.allocatedWidth + "px" : "800px";
