@@ -132,4 +132,10 @@
   <data name="Tooltip_Desc" xml:space="preserve">
     <value>Tooltip/Hilfetext für das Steuerelement.</value>
   </data>
+  <data name="ShowDemoContent" xml:space="preserve">
+    <value>Demo-Inhalt anzeigen</value>
+  </data>
+  <data name="ShowDemoContent_Desc" xml:space="preserve">
+    <value>Zeigt Beispiel-Markdown-Inhalt an, wenn kein Inhalt angegeben ist. Standardmäßig deaktiviert.</value>
+  </data>
 </root>

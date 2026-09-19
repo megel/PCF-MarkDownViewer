@@ -7,13 +7,14 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
     private mContainer: HTMLDivElement;
     private props: IMarkdownViewerProps = {
         content: "",
-        fontSize: "initial",
+        fontSize: "medium",
         overflow: "auto",
         label: undefined,
         visible: true,
         disabled: false,
         tabIndex: undefined,
         tooltip: undefined,
+        demoMode: false,
     };
 
     private _outputs: IOutputs = {};
@@ -44,6 +45,7 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
         this.props.disabled = context.parameters.DisableControl?.raw ?? this.props.disabled;
         this.props.tabIndex = context.parameters.ControlTabIndex?.raw ?? this.props.tabIndex;
         this.props.tooltip = context.parameters.CustomTooltip?.raw ?? this.props.tooltip;
+        this.props.demoMode = context.parameters.ShowDemoContent?.raw ?? this.props.demoMode;
     }
 
     /**
@@ -61,6 +63,7 @@ export class MarkDownViewer implements ComponentFramework.StandardControl<IInput
         this.props.disabled = context.parameters.DisableControl?.raw ?? this.props.disabled;
         this.props.tabIndex = context.parameters.ControlTabIndex?.raw ?? this.props.tabIndex;
         this.props.tooltip = context.parameters.CustomTooltip?.raw ?? this.props.tooltip;
+        this.props.demoMode = context.parameters.ShowDemoContent?.raw ?? this.props.demoMode;
         try {
             this.props.maxHeight = context?.mode?.allocatedHeight > 0 ? context.mode.allocatedHeight + "px" : "400px";
             this.props.maxWidth = context?.mode?.allocatedWidth > 0 ? context.mode.allocatedWidth + "px" : "800px";
