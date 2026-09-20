@@ -3,6 +3,8 @@ import * as React from 'react';
 const ReactMarkdown = require('react-markdown')
 import MarkdownPreview from '@uiw/react-markdown-preview';
 
+const DEMO_CONTENT = "# This is a header\n\nAnd this is a paragraph\n\n* Item 1\n* Item 2\n\n**Code Example** (PowerShell):\n\n```PowerShell\nGet-ChildItem -Path \"C:\\Temp\" -Filter \"*.txt\" -Recurse\n```\n";
+
 export interface IMarkdownViewerProps {
     content?:   string | undefined
     fontSize?:  string | undefined
@@ -14,6 +16,7 @@ export interface IMarkdownViewerProps {
     disabled?:  boolean | undefined
     tabIndex?:  number | undefined
     tooltip?:   string | undefined
+    demoMode?:  boolean | undefined
 }
 
 export default class MarkdownViewer extends React.Component<IMarkdownViewerProps> {
@@ -22,6 +25,8 @@ export default class MarkdownViewer extends React.Component<IMarkdownViewerProps
     public render() {
         const content = this.props.content ?? '';
         const hasContent = content.trim().length > 0;
+        const showDemoContent = !hasContent && this.props.demoMode === true;
+        const renderedContent = showDemoContent ? DEMO_CONTENT : content;
 
         if (this.props.visible === false) {
             return null;
@@ -49,10 +54,10 @@ export default class MarkdownViewer extends React.Component<IMarkdownViewerProps
                 )}
                 <div id="mdViewer">
                     <div className="wmde-markdown-var"> </div>
-                    {hasContent ? (
+                    {hasContent || showDemoContent ? (
                         <MarkdownPreview
                             id="mdMarkDown"
-                            source={content}
+                            source={renderedContent}
                             style={{
                                 background: "transparent"
                             }}
