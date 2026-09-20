@@ -53,13 +53,18 @@ export default class MarkdownViewer extends React.Component<IMarkdownViewerProps
                     <label style={{ fontWeight: 'bold', marginBottom: 4, display: 'block' }}>{this.props.label}</label>
                 )}
                 <div id="mdViewer">
-                    <div className="wmde-markdown-var"> </div>
+                    <div className="wmde-markdown-var" data-color-mode="light"> </div>
                     {hasContent || showDemoContent ? (
                         <MarkdownPreview
                             id="mdMarkDown"
                             source={renderedContent}
                             style={{
-                                background: "transparent"
+                                background: "transparent",
+                                fontSize: this.props.fontSize || "initial",
+                                color: "#24292f"
+                            }}
+                            wrapperElement={{
+                                "data-color-mode": "light"
                             }}
                             rehypeRewrite={(node: any, index: any, parent: any) => {
                                 if (node.tagName === "a" && parent && /^h(1|2|3|4|5|6)/.test(parent.tagName)) {
